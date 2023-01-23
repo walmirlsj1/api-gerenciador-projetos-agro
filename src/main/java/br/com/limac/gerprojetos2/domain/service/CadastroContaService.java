@@ -1,9 +1,9 @@
 package br.com.limac.gerprojetos2.domain.service;
 
-import br.com.limac.gerprojetos2.domain.exception.BancoNaoEncontradoException;
+import br.com.limac.gerprojetos2.domain.exception.ContaNaoEncontradaException;
 import br.com.limac.gerprojetos2.domain.exception.EntidadeEmUsoException;
-import br.com.limac.gerprojetos2.domain.model.Banco;
-import br.com.limac.gerprojetos2.domain.repository.BancoRepository;
+import br.com.limac.gerprojetos2.domain.model.Conta;
+import br.com.limac.gerprojetos2.domain.repository.ContaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,38 +13,38 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class CadastroContaService {
-    private static final String MSG_BANCO_EM_USO
-            = "Banco com código %d não pode ser removida, pois está em uso.";
-    private final BancoRepository bancoRepository;
+    private static final String MSG_CONTA_EM_USO
+            = "Conta com código %d não pode ser removida, pois está em uso.";
+    private final ContaRepository contaRepository;
 
     @Transactional
-    public Banco inserir(Banco banco) {
-        return bancoRepository.save(banco);
+    public Conta inserir(Conta conta) {
+        return contaRepository.save(conta);
     }
 
     @Transactional
-    public Banco atualizar(Banco banco) {
-        return bancoRepository.save(banco);
+    public Conta atualizar(Conta conta) {
+        return contaRepository.save(conta);
     }
 
     @Transactional
-    public void excluir(Long bancoId) {
+    public void excluir(Long contaId) {
         try {
-            bancoRepository.deleteById(bancoId);
-            bancoRepository.flush();
+            contaRepository.deleteById(contaId);
+            contaRepository.flush();
 
         } catch (EmptyResultDataAccessException e) {
-            throw new BancoNaoEncontradoException(bancoId);
+            throw new ContaNaoEncontradaException(contaId);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format(MSG_BANCO_EM_USO, bancoId));
+                    String.format(MSG_CONTA_EM_USO, contaId));
         }
 
     }
 
-    public Banco buscarOuFalhar(Long bancoId) {
-        return bancoRepository.findById(bancoId).orElseThrow(() -> new BancoNaoEncontradoException(bancoId));
+    public Conta buscarOuFalhar(Long contaId) {
+        return contaRepository.findById(contaId).orElseThrow(() -> new ContaNaoEncontradaException(contaId));
     }
 
 

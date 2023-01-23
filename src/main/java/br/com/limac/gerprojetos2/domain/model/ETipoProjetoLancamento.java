@@ -1,8 +1,6 @@
 package br.com.limac.gerprojetos2.domain.model;
 
-public enum ETipoLancamento {
+public enum ETipoProjetoLancamento {
     ENTRADA,
-    SAIDA,
-    SUPLIMENTO,
-    SANGRIA
+    SAIDA
 }

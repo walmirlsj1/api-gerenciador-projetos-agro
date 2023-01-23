@@ -4,4 +4,8 @@ public class ProjetoLancamentoNaoEncontradoException extends EntidateNaoEncontra
     public ProjetoLancamentoNaoEncontradoException(String mensagem) {
         super(mensagem);
     }
+
+    public ProjetoLancamentoNaoEncontradoException(Long lancamentoId) {
+        this(String.format("Não existe um cadastro de lancamento com código %d", lancamentoId));
+    }
 }

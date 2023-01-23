@@ -1,8 +1,8 @@
 package br.com.limac.gerprojetos2.domain.repository;
 
-import br.com.limac.gerprojetos2.domain.model.Banco;
+import br.com.limac.gerprojetos2.domain.model.Caixa;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BancoRepository extends JpaRepository<Banco, Long> {
+public interface CaixaRepository extends JpaRepository<Caixa, Long> {
 
 }
