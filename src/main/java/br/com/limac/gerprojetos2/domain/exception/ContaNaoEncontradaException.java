@@ -1,6 +1,6 @@
 package br.com.limac.gerprojetos2.domain.exception;
 
-public class ContaNaoEncontradaException extends EntidateNaoEncontradaException {
+public class ContaNaoEncontradaException extends EntidadeNaoEncontradaException {
     public ContaNaoEncontradaException(String mensagem) {
         super(mensagem);
     }

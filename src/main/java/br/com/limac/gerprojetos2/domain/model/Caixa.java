@@ -1,13 +1,12 @@
 package br.com.limac.gerprojetos2.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -21,6 +20,10 @@ public class Caixa {
     private Long id;
     private OffsetDateTime data;
     private BigDecimal valor;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String descricao;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private ETipoCaixaLancamento tipoLancamento;
@@ -29,7 +32,9 @@ public class Caixa {
     @JoinColumn(nullable = false)
     private Conta conta;
 
-    @CreationTimestamp
+    @OneToOne(mappedBy = "caixa")
+    private ProjetoLancamento lancamento;
+
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dataCriacao;
 
@@ -47,7 +52,7 @@ public class Caixa {
             conta.depositar(getValor());
     }
 
-    public void registrar(){
+    public void registrar() {
         if (tipoLancamento.equals(ETipoCaixaLancamento.ENTRADA))
             conta.depositar(getValor());
         else if (tipoLancamento.equals(ETipoCaixaLancamento.SUPLIMENTO))
@@ -56,5 +61,17 @@ public class Caixa {
             conta.saque(getValor());
         else if (tipoLancamento.equals(ETipoCaixaLancamento.SANGRIA))
             conta.saque(getValor());
+        System.out.println(conta.getSaldo());
+    }
+
+    @PrePersist
+    public void onInsert() {
+        this.dataCriacao = OffsetDateTime.now();
+        this.dataAtualizacao = this.dataCriacao;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.dataAtualizacao = OffsetDateTime.now();
     }
 }

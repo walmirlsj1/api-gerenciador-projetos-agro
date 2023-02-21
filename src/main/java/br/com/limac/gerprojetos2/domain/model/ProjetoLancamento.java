@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -40,22 +39,24 @@ public class ProjetoLancamento {
     @JoinColumn(nullable = false)
     private Projeto projeto;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Conta conta;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @OneToOne
+    @JoinColumn
     private Caixa caixa;
 
-    @Column(columnDefinition = "boolean default true")
-    private boolean estaAtivo;
-
-    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dataCriacao;
 
     private OffsetDateTime dataAtualizacao;
 
 
+    @PrePersist
+    public void onInsert() {
+        this.dataCriacao = OffsetDateTime.now();
+        this.dataAtualizacao = this.dataCriacao;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.dataAtualizacao = OffsetDateTime.now();
+    }
 }

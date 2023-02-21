@@ -5,17 +5,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "TB_CLIENTE")
 @SequenceGenerator(name = "cliente_seq", sequenceName = "cliente_seq", initialValue = 1, allocationSize = 1)
-public class Cliente
-{
+public class Cliente {
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_seq")
@@ -29,10 +28,10 @@ public class Cliente
     private String fantasia;
 
     @NotBlank(message = "Campo CPF/CNPJ nao pode esta vazio")
-    @Column(name = "cpf_npj")
+    @Column(name = "cpf_cnpj", unique = true)
     private String cpfCnpj;
 
-    @Column(name = "rg_ie")
+    @Column(name = "rg_ie", unique = true)
     private String rgIe;
 
     @Column(name = "email")
@@ -44,8 +43,9 @@ public class Cliente
     @Column(name = "celular")
     private String celular;
 
-    @Column(name = "tipo_empresa", columnDefinition = "boolean default false", nullable = false)
-    private Boolean tipoEmpresa = false;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_empresa", nullable = false)
+    private ETipoPessoa tipoEmpresa;
 
 
     @OneToMany(mappedBy = "cliente")
@@ -53,15 +53,28 @@ public class Cliente
     private List<Projeto> projetos;
 
     @Column(columnDefinition = "boolean default true")
-    private boolean estaAtivo;
+    private boolean estaAtivo = true;
 
-    @CreationTimestamp
+    //    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dataCriacao;
 
+    //    @UpdateTimestamp
     private OffsetDateTime dataAtualizacao;
 
     @Version
     @Column(name = "opt_lock")
     private Long version;
+
+
+    @PrePersist
+    public void onInsert() {
+        this.dataCriacao = OffsetDateTime.now();
+        this.dataAtualizacao = this.dataCriacao;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.dataAtualizacao = OffsetDateTime.now();
+    }
 }

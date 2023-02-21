@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+
 @Service
 @AllArgsConstructor
 public class CadastroBancoService {
@@ -21,11 +23,15 @@ public class CadastroBancoService {
 
     @Transactional
     public Banco inserir(Banco banco) {
+
+        banco.setEstaAtivo(true);
         return bancoRepository.save(banco);
     }
 
     @Transactional
     public Banco atualizar(Banco banco) {
+        banco.setDataAtualizacao(OffsetDateTime.now());
+
         return bancoRepository.save(banco);
     }
 

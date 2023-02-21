@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -40,7 +39,7 @@ public class Projeto {
     private OffsetDateTime dataInicioProj;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "data_fim", nullable = false)
+    @Column(name = "data_fim")
     private OffsetDateTime dataFinalProj;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -72,7 +71,7 @@ public class Projeto {
     @Column(columnDefinition = "boolean default true")
     private boolean estaAtivo;
 
-    @CreationTimestamp
+//    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime dataCriacao;
 
@@ -82,6 +81,17 @@ public class Projeto {
     @Column(name = "opt_lock")
     private Long version;
 
+    @PrePersist
+    public void onInsert() {
+        this.dataCriacao = OffsetDateTime.now();
+        this.dataAtualizacao = this.dataCriacao;
+        setCodigo(UUID.randomUUID().toString());
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.dataAtualizacao = OffsetDateTime.now();
+    }
 
     public void Iniciar() {
         setStatus(EStatusProjeto.INICIADO);
@@ -107,8 +117,5 @@ public class Projeto {
         this.statusProjeto = novoStatus;
     }
 
-    @PrePersist
-    private void gerarCodigo() {
-        setCodigo(UUID.randomUUID().toString());
-    }
+
 }

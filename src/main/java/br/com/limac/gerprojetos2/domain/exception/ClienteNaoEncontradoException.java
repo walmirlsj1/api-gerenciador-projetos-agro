@@ -1,6 +1,6 @@
 package br.com.limac.gerprojetos2.domain.exception;
 
-public class ClienteNaoEncontradoException extends EntidateNaoEncontradaException {
+public class ClienteNaoEncontradoException extends EntidadeNaoEncontradaException {
     public ClienteNaoEncontradoException(String mensagem) {
         super(mensagem);
     }

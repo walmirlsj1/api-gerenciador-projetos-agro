@@ -10,6 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+
 @Service
 @AllArgsConstructor
 public class CadastroClienteService {
@@ -24,6 +26,7 @@ public class CadastroClienteService {
 
     @Transactional
     public Cliente atualizar(Cliente cliente) {
+        cliente.setDataAtualizacao(OffsetDateTime.now());
         return clienteRepository.save(cliente);
     }
 

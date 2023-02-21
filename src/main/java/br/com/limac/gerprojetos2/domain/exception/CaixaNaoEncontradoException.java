@@ -1,6 +1,6 @@
 package br.com.limac.gerprojetos2.domain.exception;
 
-public class CaixaNaoEncontradoException extends EntidateNaoEncontradaException {
+public class CaixaNaoEncontradoException extends EntidadeNaoEncontradaException {
     public CaixaNaoEncontradoException(String mensagem) {
         super(mensagem);
     }
